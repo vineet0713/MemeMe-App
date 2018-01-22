@@ -35,6 +35,7 @@ extension MemeEditorViewController: UITextFieldDelegate {
         } else {
             textField.text = textField.text?.trimmingCharacters(in: .whitespaces)
         }
+        
         // if user has selected an image and both meme fields are filled, then enable the "Share" Button
         shareButton.isEnabled = (imagePickerView.image != nil && topMemeField.text != DEFAULT_TEXT[TOP_TAG] && bottomMemeField.text != DEFAULT_TEXT[BOTTOM_TAG])
     }

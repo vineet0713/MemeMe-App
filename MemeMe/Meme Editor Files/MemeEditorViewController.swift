@@ -39,7 +39,6 @@ class MemeEditorViewController: UIViewController {
     // top Toolbar and its outlets:
     @IBOutlet weak var topToolbar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
-    @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     // bottom Toolbar and its outlets:
     @IBOutlet weak var bottomToolbar: UIToolbar!
@@ -47,7 +46,7 @@ class MemeEditorViewController: UIViewController {
     @IBOutlet weak var chooseImageButton: UIBarButtonItem!
     
     // default value of the final Meme:
-    var finalMeme = Meme(topText: nil, bottomText: nil, originalImage: nil, memedImage: nil)
+    // var finalMeme = Meme(topText: nil, bottomText: nil, originalImage: nil, memedImage: nil)
     
     var bottomEditing = false
     
@@ -70,7 +69,6 @@ class MemeEditorViewController: UIViewController {
         setupMemeField(topMemeField, with: TOP_TAG)
         setupMemeField(bottomMemeField, with: BOTTOM_TAG)
         
-        // disables the "Share" Button:
         shareButton.isEnabled = false
     }
     
@@ -79,6 +77,9 @@ class MemeEditorViewController: UIViewController {
         
         // NSNotifications provide a way to announce information throughout an app, even across classes
         self.subscribeToKeyboardNotifications()
+        
+        // if user has selected an image and both meme fields are filled, then enable the "Share" Button
+        shareButton.isEnabled = (imagePickerView.image != nil && topMemeField.text != DEFAULT_TEXT[TOP_TAG] && bottomMemeField.text != DEFAULT_TEXT[BOTTOM_TAG])
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -89,6 +90,14 @@ class MemeEditorViewController: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape {
+            chooseImageButton.isEnabled = false
+        } else {
+            chooseImageButton.isEnabled = true
+        }
     }
     
     
@@ -179,7 +188,7 @@ class MemeEditorViewController: UIViewController {
             // this only saves the meme if the activity is completed (not if the user cancels)
             if success {
                 self.saveMeme()
-                self.confirmMemeSaved()
+                self.dismiss(animated: true, completion: nil)
             }
         }
         self.present(activityController, animated: true, completion: nil)
@@ -187,7 +196,10 @@ class MemeEditorViewController: UIViewController {
     
     func saveMeme() {
         // create the meme
-        finalMeme = Meme(topText: topMemeField.text!, bottomText: bottomMemeField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
+        let finalMeme = Meme(topText: topMemeField.text!, bottomText: bottomMemeField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
+        
+        // add this Meme to the shared data
+        (UIApplication.shared.delegate as! AppDelegate).memes.append(finalMeme)
     }
     
     // Given by instructor:
@@ -212,12 +224,9 @@ class MemeEditorViewController: UIViewController {
         bottomToolbar.isHidden = hide
     }
     
-    func confirmMemeSaved() {
-        let alertController = UIAlertController(title: "Success", message: "Your meme was successfully saved!", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
-            NSLog("The \"Success\" alert occured.")
-        }))
-        self.present(alertController, animated: true, completion: nil)
+    @IBAction func cancel(_ sender: Any) {
+        // TODO: implement a dialogue box confirming the cancellation
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
