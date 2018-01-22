@@ -25,14 +25,14 @@ class MemeCollectionViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        // self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
         
         syncMemes()
         
         // Given from instructor notes:
-        let space: CGFloat = 3.0
+        let space: CGFloat = 10.0
         let widthDimension = (self.view.frame.size.width - (2*space)) / 3.0
         let heightDimension = (self.view.frame.size.height - (2*space)) / 3.0
         
@@ -50,6 +50,7 @@ class MemeCollectionViewController: UICollectionViewController {
         super.viewWillAppear(animated)
         
         syncMemes()
+        self.collectionView?.reloadData()
     }
     
     func syncMemes() {
