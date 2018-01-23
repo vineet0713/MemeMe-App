@@ -8,11 +8,7 @@
 
 import UIKit
 
-
-
 // MARK: Initialize all constants
-
-
 
 let TOP_TAG = 0
 let BOTTOM_TAG = 1
@@ -26,11 +22,7 @@ let MEME_TEXT_ATTRIBUTES: [String : Any] = [
 
 class MemeEditorViewController: UIViewController {
     
-    
-    
     // MARK: Initialize outlets and class variables
-    
-    
     
     @IBOutlet weak var imagePickerView: UIImageView!
     @IBOutlet weak var topMemeField: UITextField!
@@ -50,11 +42,7 @@ class MemeEditorViewController: UIViewController {
     
     var bottomEditing = false
     
-    
-    
     // MARK: Overriden functions from UIViewController
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,11 +88,7 @@ class MemeEditorViewController: UIViewController {
         }
     }
     
-    
-    
     // MARK: Function to setup the meme Text Fields:
-    
-    
     
     func setupMemeField(_ textField: UITextField, with tag: Int) {
         textField.tag = tag
@@ -114,11 +98,7 @@ class MemeEditorViewController: UIViewController {
         textField.delegate = self
     }
     
-    
-    
     // MARK: Keyboard Notification functions
-    
-    
     
     func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
@@ -153,11 +133,7 @@ class MemeEditorViewController: UIViewController {
         // '.UIKeyboardWillShow' is shortened version of 'Notification.Name.UIKeyboardWillShow'
     }
     
-    
-    
     // MARK: Picking an Image
-    
-    
     
     @IBAction func pickImage(_ sender: Any) {
         // launches a UIImagePickerController
@@ -176,11 +152,7 @@ class MemeEditorViewController: UIViewController {
     
     // (see TextFieldExtensions.swift file for UITextFieldDelegate functions)
     
-    
-    
     // MARK: Saving an Image
-    
-    
     
     @IBAction func shareImage(_ sender: Any) {
         let activityController = UIActivityViewController(activityItems: [generateMemedImage()], applicationActivities: nil)
